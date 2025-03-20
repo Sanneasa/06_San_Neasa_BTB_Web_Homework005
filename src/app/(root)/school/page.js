@@ -5,34 +5,44 @@ import { getAllCarton, getAllCategoryCarton } from "@/service/cartonService";
 export const dynamic = "force-dynamic";
 
 export default async function School({ searchParams }) {
+ const search = (await searchParams)
+  const searchResult = search.search || "";
+  const categoryFilter = search.category || "";
  
-  const searchQuery = searchParams?.search || "";
-  const categoryId = searchParams?.category
-    ? Number(searchParams.category)
-    : null;
+  const api = await getAllCarton(searchResult);
+  const cartoonListRaw = api.payload || [];
+  
+  const apiCate = await getAllCategoryCarton();
+  const categories = apiCate.payload || [];
+ 
+    const cartoonList = 
+    !categoryFilter
+      ? cartoonListRaw
+      : cartoonListRaw.filter(
+          (cartoon) => cartoon.ct_genre_id === Number(categoryFilter)
+        );
 
-
-  const [cartons, categories] = await Promise.all([
-    getAllCarton(searchQuery),
-    getAllCategoryCarton(),
-  ]);
-
-
-  const filteredCartons = categoryId
-    ? cartons.payload?.filter((c) => c.cartoon_genre_id === categoryId) || []
-    : cartons.payload || [];
+        console.log("Carton:",cartoonList)
+ 
 
   return (
-    <div className="bg-gray-100 w-fit h-fit rounded-2xl">
+    <div className="bg-gray-100 w-full h-fit rounded-2xl">
       <BookAll
         title="Old School Cartoon"
-        categories={categories.payload || []}
-        initialCategory={categoryId?.toString() || "All"}
+        categories={categories}
+        searchParams={searchParams}
       />
-      <div className="grid grid-cols-3 mx-auto w-[90%] pt-20 gap-20">
-        {filteredCartons.map((carton) => (
-          <SchoolCard key={carton.id} carton={carton} />
-        ))}
+      <div className="grid grid-cols-4 mx-auto w-[90%] pt-20 gap-20">
+        {cartoonList.length > 0 ? (
+          cartoonList.map((cartoon) => (
+            <div key={cartoon?.id}>
+              <SchoolCard cartoon={cartoon} />
+            </div>
+          )
+          )
+        ) : (
+          <p>No books found.</p>
+        )}
       </div>
     </div>
   );

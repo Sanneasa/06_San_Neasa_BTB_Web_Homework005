@@ -4,20 +4,24 @@ import BookCard from "@/app/components/BookCard";
 import { getAllBookCategory, getAllBooks } from "@/service/bookService";
 
 export default async function Book({ searchParams }) {
- const searchResult = searchParams?.search || "";
- const categoryFilter = searchParams?.category ?? "All";
+ const search = (await searchParams)
+ const searchResult = search.search || "";
+ const categoryFilter = search.category || "";
+
  const api = await getAllBooks(searchResult);
  const bookListRaw = api.payload || [];
+
  const apiCate = await getAllBookCategory();
  const categories = apiCate.payload || [];
 
-  const bookList =
-    categoryFilter === "All"
+   const bookList =
+    !categoryFilter
       ? bookListRaw
-      : bookListRaw.filter((book) => book.book_cate_id === categoryFilter);
+      : bookListRaw.filter((book) => book.book_cate_id === Number(categoryFilter));
+
 
   return (
-    <div className="w-fit h-fit rounded-2xl bg-gray-100">
+    <div className="w-full h-fit rounded-2xl bg-gray-100">
       <BookAll
         title="All Books"
         categories={categories}

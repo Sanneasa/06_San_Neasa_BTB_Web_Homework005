@@ -22,11 +22,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="grid grid-cols-10 gap-10 max-h-screen overflow-hidden">
+      <body className="grid grid-cols-10 max-h-screen overflow-hidden">
         <div className="col-span-2">
           <SideBar />
         </div>
-        <div className="col-span-8 pt-15 pr-15 max-h-screen overflow-auto">
+        <div className="col-span-8 pt-15 px-15 max-h-screen overflow-auto">
           <SearchBar />
           {children}
         </div>

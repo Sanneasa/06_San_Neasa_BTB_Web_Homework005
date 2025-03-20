@@ -6,7 +6,7 @@ export default function BookCard({book}) {
     <div className="p-10 relative ">
       <Link
         href={`/books/${book?.id}`}
-        className="h-[350px] w-[600px] flex bg-white flex-col items-center border border-gray-200 rounded-xl shadow-sm md:flex-row hover:shadow-md transition-shadow"
+        className="h-[350px] w-full flex bg-white flex-col items-center border border-gray-200 rounded-xl shadow-sm md:flex-row hover:shadow-md transition-shadow"
       >
         <Image
           width={200}
